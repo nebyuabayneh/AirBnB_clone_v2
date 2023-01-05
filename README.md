@@ -1,2 +1,2 @@
 # AirBnB_clone_v2
-AirBnB - MySQL
+AirBnB_clone_v2
