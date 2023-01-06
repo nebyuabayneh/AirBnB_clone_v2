@@ -1,28 +1,34 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
-import string
-from tkinter import CASCADE
-from models import city
-from models.base_model import BaseModel,Base
-from sqlalchemy import column, String, Integer, DateTime,ForeignKey
-from sqlalchemy.orm import relationship
+""" holds class State"""
+import models
+from models.base_model import BaseModel, Base
 from models.city import City
+from os import getenv
+import sqlalchemy
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
-    """ State class """
-    name = column(string(128), nullable=False)
-    cities = relationship("city", backref="state",
-                            CASCADE="all, delete-orphan"
-    )
+    """Representation of state """
+    if models.storage_t == "db":
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref="state")
+    else:
+        name = ""
 
-    @property
-    def cities(self):
-        # getter attribute cities that retutns the list of city
-        from models import storage
-        my_list =[]
-        extracted_cities = storage.all(City).values()
-        for city in extracted_cities:
-            if self.id == City.state_id:
-                my_list.append(City)
-        return my_list
+    def __init__(self, *args, **kwargs):
+        """initializes state"""
+        super().__init__(*args, **kwargs)
+
+    if models.storage_t != "db":
+        @property
+        def cities(self):
+            """getter for list of city instances related to the state"""
+            city_list = []
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list
