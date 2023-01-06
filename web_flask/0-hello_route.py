@@ -1,14 +1,20 @@
 #!/usr/bin/python3
-"""Module - script that starts a Flask web application"""
+"""class Flask"""
 from flask import Flask
+"""class Flask"""
+
+
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
-    """Handles the root url"""
-    return 'Hello HBNB!'
+    """displays text
+    Returns:
+        text
+    """
+    return "Hello HBNB!"
 
 
-if __name__ == '__main__':
-    app.run("0.0.0.0", 5000)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
